@@ -5,13 +5,26 @@ socket.onopen = (event) => { // Mientras la conexion este abierta
 };
 
 socket.onmessage = (event) => { // Cuando se recibe un mensaje
+    console.log("Message received: ", event.data);
+    const Respuesta = JSON.parse(event.data);
     const output = document.getElementById("output");
-    output.innerHTML += `<p>Received: ${event.data}</p>`;
+    output.innerHTML += `<p>${Respuesta.user}: ${Respuesta.message}</p>`;
 };
 
 function sendMessage() { // Enviar mensaje
     const messageInput = document.getElementById("messageInput");
+    const userInput = document.getElementById("userInput");
+
     const message = messageInput.value;
-    socket.send(message);
+    const user = userInput.value;
+
+    const Packet = {
+        user: user,
+        message: message
+    }
+    let paquete = JSON.stringify(Packet);
+    console.log(paquete);
+
+    socket.send(paquete);
     messageInput.value = "";
 }
