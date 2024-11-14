@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"gorm.io/gorm"
 )
 
 var actualizador = websocket.Upgrader{
@@ -16,7 +17,7 @@ var actualizador = websocket.Upgrader{
 	},
 }
 
-func Ejecuta_Socket() gin.HandlerFunc {
+func Ejecuta_Socket(db *gorm.DB) gin.HandlerFunc {
 	return func(Request *gin.Context) {
 		conn, err := actualizador.Upgrade(Request.Writer, Request.Request, nil)
 		if err != nil {

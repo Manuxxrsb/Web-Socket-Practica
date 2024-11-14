@@ -25,7 +25,7 @@ func RunServer(router *gin.Engine) {
 	fmt.Print("Conexión exitosa a la BD")
 
 	//Rutas para el Web Socket
-	router.GET("/Web_Socket", handlers.Ejecuta_Socket())
+	router.GET("/Web_Socket", handlers.Ejecuta_Socket(db))
 
 	//Rutas para el CRUD de Mensajes
 	router.POST("/Mensaje", handlers.Create_Mensaje(db))
