@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	models "backend/Models"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -8,6 +10,7 @@ import (
 	"github.com/gorilla/websocket"
 	"gorm.io/gorm"
 )
+
 
 var actualizador = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -32,12 +35,19 @@ func Ejecuta_Socket(db *gorm.DB) gin.HandlerFunc {
 				return
 			}
 
-			fmt.Printf("Recibido: %s\n", mensaje) //imprimo el mensaje
+			// Deserializar el mensaje del cliente
+            var wsMessage models.Mensaje
+            if err := json.Unmarshal(mensaje, &wsMessage); err != nil {
+                fmt.Println("Error al deserializar mensaje:", err)
+                continue
+            }
 
-			//Desestructurar el mensaje
-			mensajeparse := Request.ShouldBindJSON(&mensaje).Error()
-			
-			fmt.Printf("Recibido: %s\n", mensajeparse) //imprimo el mensaje
+            fmt.Printf("Usuario: %s, Mensaje: %s\n", wsMessage.Username, wsMessage.Contenido)
+
+			if err := db.Create(&wsMessage).Error; err != nil {
+				Request.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+				return
+			}
 
 
 			err = conn.WriteMessage(mt, mensaje)
