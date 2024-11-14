@@ -31,7 +31,15 @@ func Ejecuta_Socket(db *gorm.DB) gin.HandlerFunc {
 				fmt.Println(err)
 				return
 			}
-			fmt.Printf("Recibido: %s\n", mensaje)
+
+			fmt.Printf("Recibido: %s\n", mensaje) //imprimo el mensaje
+
+			//Desestructurar el mensaje
+			mensajeparse := Request.ShouldBindJSON(&mensaje).Error()
+			
+			fmt.Printf("Recibido: %s\n", mensajeparse) //imprimo el mensaje
+
+
 			err = conn.WriteMessage(mt, mensaje)
 			if err != nil {
 				fmt.Println(err)

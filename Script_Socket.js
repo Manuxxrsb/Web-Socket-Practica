@@ -8,7 +8,7 @@ socket.onmessage = (event) => { // Cuando se recibe un mensaje
     console.log("Message received: ", event.data);
     const Respuesta = JSON.parse(event.data);
     const output = document.getElementById("output");
-    output.innerHTML += `<p>${Respuesta.user}: ${Respuesta.message}</p>`;
+    output.innerHTML += `<p>${Respuesta.username}: ${Respuesta.contenido}</p>`;
 };
 
 function sendMessage() { // Enviar mensaje
@@ -19,9 +19,10 @@ function sendMessage() { // Enviar mensaje
     const user = userInput.value;
 
     const Packet = {
-        user: user,
-        message: message
+        username: user,
+        contenido: message
     }
+
     let paquete = JSON.stringify(Packet);
     console.log(paquete);
 
